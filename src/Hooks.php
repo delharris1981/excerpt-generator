@@ -29,15 +29,26 @@ class Hooks
      */
     public function auto_summarize_new_post(array $data, array $postarr): array
     {
-        // Only trigger for new posts that aren't revisions/autosaves
+        // Filter by post type - only process posts and pages by default
+        $allowed_types = apply_filters('luhn_summarizer_allowed_post_types', ['post', 'page']);
+        if (!in_array($data['post_type'], $allowed_types, true)) {
+            return $data;
+        }
+
+        // Only trigger for new posts, auto-drafts, or drafts that don't have an excerpt yet
         if (!empty($postarr['ID'])) {
             $status = get_post_status($postarr['ID']);
-            if ($status !== false && $status !== 'new' && $status !== 'auto-draft') {
+            $allowed_statuses = ['new', 'auto-draft', 'draft', 'pending'];
+            if ($status !== false && !in_array($status, $allowed_statuses, true)) {
                 return $data;
             }
         }
 
-        $options = get_option('luhn_summarizer_options');
+        $options = get_option('luhn_summarizer_options', [
+            'sentence_count' => 3,
+            'auto_generate' => 1,
+        ]);
+
         if (empty($options['auto_generate'])) {
             return $data;
         }

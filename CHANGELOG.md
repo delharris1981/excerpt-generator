@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.0.0-alpha] - 2025-12-28
+## [1.0.1] - 2025-12-28
+### Fixed
+- Fixed auto-generation logic to work with "Draft" and "Pending" post statuses.
+- Corrected JS asset pathing for the manual generation button.
+- Improved default settings handling for new installations.
+
+## [1.0.0] - 2025-12-28
 ### Added
 - Core Luhn Summarization Engine with cluster scoring logic.
 - Admin Settings page under "Settings > Luhn Excerpts".
