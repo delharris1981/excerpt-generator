@@ -17,7 +17,7 @@ class UpdateManager
 
     private string $slug;
     private string $plugin_file;
-    private string $username = 'derek'; // Placeholder
+    private string $username = 'delharris1981'; // Placeholder
     private string $repo = 'excerpt-generator'; // Placeholder
 
     public function __construct(string $plugin_file)
