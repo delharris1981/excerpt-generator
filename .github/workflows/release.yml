@@ -1,0 +1,44 @@
+name: "Automatic Plugin Release"
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers only when you push a tag starting with 'v'
+
+jobs:
+  build:
+    name: "Create Release"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Important: Required for creating releases
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Build & Zip Plugin"
+        run: |
+          # Define plugin name
+          PLUGIN_NAME="luhn-summarizer"
+          
+          # Create a clean folder for the zip structure
+          mkdir -p $PLUGIN_NAME
+          
+          # Copy only necessary production files
+          cp -r src $PLUGIN_NAME/
+          cp -r assets $PLUGIN_NAME/
+          cp luhn-summarizer.php $PLUGIN_NAME/
+          cp README.md $PLUGIN_NAME/
+          cp CHANGELOG.md $PLUGIN_NAME/
+          
+          # Zip the plugin folder
+          zip -r ${PLUGIN_NAME}.zip $PLUGIN_NAME
+
+      - name: "Create GitHub Release"
+        uses: softprops/action-gh-release@v2
+        with:
+          files: luhn-summarizer.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
