@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Luhn Excerpt Generator
  * Description: Generates intelligent excerpts using the Luhn algorithm for automated summarization.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Antigravity AI
  * Text Domain: luhn-summarizer
  * Requires PHP: 8.2

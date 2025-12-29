@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.1] - 2025-12-29
+### Improved
+- Forced an update check whenever an administrator logs in, ensuring update notifications are seen more promptly.
+
 ## [1.1.0] - 2025-12-29
 ### Added
 - Added Russian language support with localized stop words.

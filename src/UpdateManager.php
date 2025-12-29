@@ -27,6 +27,7 @@ class UpdateManager
 
         add_filter('site_transient_update_plugins', [$this, 'check_for_update']);
         add_filter('plugins_api', [$this, 'plugin_popup_info'], 20, 3);
+        add_action('wp_login', [$this, 'force_check_on_login'], 10, 2);
     }
 
     /**
@@ -128,5 +129,19 @@ class UpdateManager
         ];
 
         return $res;
+    }
+
+    /**
+     * Forces an update check when an administrator logs in.
+     */
+    public function force_check_on_login(string $user_login, \WP_User $user): void
+    {
+        if (user_can($user, 'manage_options')) {
+            // Clear our local 12-hour cache
+            delete_transient('luhn_summarizer_update_check');
+
+            // Force WordPress to refresh plugin update data
+            delete_site_transient('update_plugins');
+        }
     }
 }
