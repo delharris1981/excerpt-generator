@@ -28,6 +28,7 @@ class UpdateManager
         add_filter('site_transient_update_plugins', [$this, 'check_for_update']);
         add_filter('plugins_api', [$this, 'plugin_popup_info'], 20, 3);
         add_action('wp_login', [$this, 'force_check_on_login'], 10, 2);
+        add_action('upgrader_process_complete', [$this, 'after_update'], 10, 2);
     }
 
     /**
@@ -142,6 +143,21 @@ class UpdateManager
 
             // Force WordPress to refresh plugin update data
             delete_site_transient('update_plugins');
+        }
+    }
+
+    /**
+     * Reactivates the plugin after a successful update.
+     */
+    public function after_update($upgrader_object, $options): void
+    {
+        if ($options['action'] === 'update' && $options['type'] === 'plugin' && isset($options['plugins'])) {
+            foreach ($options['plugins'] as $plugin) {
+                if ($plugin === $this->slug) {
+                    activate_plugin($this->slug);
+                    break;
+                }
+            }
         }
     }
 }
