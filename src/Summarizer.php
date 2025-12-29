@@ -16,9 +16,11 @@ class Summarizer
 {
 
     private array $stop_words = [];
+    private string $language = 'en';
 
-    public function __construct()
+    public function __construct(string $language = 'en')
     {
+        $this->language = $language;
         $this->stop_words = $this->get_stop_words();
     }
 
@@ -66,7 +68,7 @@ class Summarizer
      */
     private function tokenize_sentences(string $text): array
     {
-        return preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        return preg_split('/(?<=[.?!])\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
@@ -92,8 +94,8 @@ class Summarizer
      */
     private function tokenize_words(string $text): array
     {
-        $clean = strtolower(preg_replace('/[^\w\s]/', '', $text));
-        return preg_split('/\s+/', $clean, -1, PREG_SPLIT_NO_EMPTY);
+        $clean = mb_strtolower(preg_replace('/[^\p{L}\p{N}\s]/u', '', $text), 'UTF-8');
+        return preg_split('/\s+/u', $clean, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
@@ -147,10 +149,167 @@ class Summarizer
     }
 
     /**
-     * Returns a list of English stop words.
+     * Returns a list of stop words based on the current language.
      */
     private function get_stop_words(): array
     {
+        if ($this->language === 'ru') {
+            return [
+                'и',
+                'в',
+                'во',
+                'не',
+                'что',
+                'он',
+                'на',
+                'я',
+                'с',
+                'со',
+                'как',
+                'а',
+                'то',
+                'все',
+                'она',
+                'так',
+                'его',
+                'но',
+                'да',
+                'ты',
+                'к',
+                'у',
+                'же',
+                'вы',
+                'за',
+                'бы',
+                'по',
+                'только',
+                'ее',
+                'мне',
+                'было',
+                'вот',
+                'от',
+                'меня',
+                'еще',
+                'нет',
+                'о',
+                'из',
+                'ему',
+                'теперь',
+                'когда',
+                'даже',
+                'ну',
+                'вдруг',
+                'ли',
+                'если',
+                'уже',
+                'или',
+                'ни',
+                'быть',
+                'был',
+                'него',
+                'до',
+                'вас',
+                'нибудь',
+                'опять',
+                'уж',
+                'вам',
+                'ведь',
+                'там',
+                'потом',
+                'себя',
+                'ничего',
+                'ей',
+                'может',
+                'они',
+                'тут',
+                'где',
+                'есть',
+                'надо',
+                'ней',
+                'для',
+                'мы',
+                'тебя',
+                'их',
+                'чем',
+                'была',
+                'сам',
+                'чтоб',
+                'без',
+                'будто',
+                'чего',
+                'раз',
+                'тоже',
+                'себе',
+                'под',
+                'будет',
+                'ж',
+                'тогда',
+                'кто',
+                'этот',
+                'того',
+                'потому',
+                'этого',
+                'какой',
+                'совсем',
+                'ним',
+                'здесь',
+                'этом',
+                'один',
+                'почти',
+                'мой',
+                'тем',
+                'чтобы',
+                'нее',
+                'сейчас',
+                'были',
+                'куда',
+                'зачем',
+                'всех',
+                'никогда',
+                'можно',
+                'при',
+                'наконец',
+                'два',
+                'об',
+                'другой',
+                'хоть',
+                'после',
+                'над',
+                'больше',
+                'тот',
+                'через',
+                'эти',
+                'нас',
+                'про',
+                'всего',
+                'них',
+                'какая',
+                'много',
+                'разве',
+                'три',
+                'эту',
+                'моя',
+                'впрочем',
+                'хорошо',
+                'свою',
+                'этой',
+                'перед',
+                'иногда',
+                'лучше',
+                'чуть',
+                'том',
+                'нельзя',
+                'такой',
+                'им',
+                'более',
+                'всегда',
+                'конечно',
+                'всю',
+                'между'
+            ];
+        }
+
+        // Default to English
         return [
             'a',
             'about',

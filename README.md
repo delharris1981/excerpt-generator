@@ -1,4 +1,4 @@
-# Luhn Excerpt Generator (v1.0.1)
+# Luhn Excerpt Generator (v1.1.0)
 
 A high-performance WordPress plugin that leverages the **Luhn Heuristic Algorithm** to generate intelligent, context-aware excerpts.
 

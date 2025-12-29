@@ -47,6 +47,7 @@ class Admin
             'default' => [
                 'sentence_count' => 3,
                 'auto_generate' => 1,
+                'language' => 'en',
             ],
         ]);
 
@@ -74,6 +75,15 @@ class Admin
             'luhn_main_section',
             ['label_for' => 'auto_generate']
         );
+
+        add_settings_field(
+            'language',
+            __('Language', 'luhn-summarizer'),
+            [$this, 'render_select_field'],
+            'luhn-summarizer',
+            'luhn_main_section',
+            ['label_for' => 'language']
+        );
     }
 
     /**
@@ -89,6 +99,11 @@ class Admin
         }
 
         $output['auto_generate'] = isset($input['auto_generate']) ? 1 : 0;
+
+        if (isset($input['language'])) {
+            $allowed = ['en', 'ru'];
+            $output['language'] = in_array($input['language'], $allowed) ? $input['language'] : 'en';
+        }
 
         return $output;
     }
@@ -144,6 +159,25 @@ class Admin
         <label for="<?php echo esc_attr($args['label_for']); ?>">
             <?php esc_html_e('Automatically generate an excerpt when a new post is published.', 'luhn-summarizer'); ?>
         </label>
+        <?php
+    }
+
+    /**
+     * Input field callback for language selection.
+     */
+    public function render_select_field(array $args): void
+    {
+        $options = get_option(self::OPTION_NAME);
+        $value = $options['language'] ?? 'en';
+        ?>
+        <select id="<?php echo esc_attr($args['label_for']); ?>"
+            name="<?php echo esc_attr(self::OPTION_NAME); ?>[<?php echo esc_attr($args['label_for']); ?>]">
+            <option value="en" <?php selected($value, 'en'); ?>><?php esc_html_e('English', 'luhn-summarizer'); ?></option>
+            <option value="ru" <?php selected($value, 'ru'); ?>><?php esc_html_e('Russian', 'luhn-summarizer'); ?></option>
+        </select>
+        <p class="description">
+            <?php esc_html_e('Select the primary language of your content for better summarization accuracy.', 'luhn-summarizer'); ?>
+        </p>
         <?php
     }
 }

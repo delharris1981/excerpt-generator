@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2025-12-29
+### Added
+- Added Russian language support with localized stop words.
+- Implemented Unicode-safe tokenization and lowercase handling for Cyrillic support.
+- Added language selection setting to the plugin dashboard.
+
 ## [1.0.1] - 2025-12-28
 ### Fixed
 - Fixed auto-generation logic to work with "Draft" and "Pending" post statuses.
